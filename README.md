@@ -1,59 +1,71 @@
-```markdown
-# OrdenaLab - Laboratório de Ordenação
+# OrdenaLab — Laboratório Interativo de Algoritmos de Ordenação
 
-Projeto desenvolvido para a disciplina de Estrutura de Dados.
-
-## Objetivo
-
-Criar um site que recebe uma lista de números do usuário e organiza
-os valores em ordem crescente ou decrescente.
+Projeto educacional desenvolvido para a disciplina de Estrutura de Dados. O site recebe uma sequência numérica informada pelo visitante e demonstra sua ordenação.
 
 ## Funcionalidades
 
-- Entrada de números separados por vírgula ou espaço.
-- Validação de valores inválidos.
-- Ordenação crescente e decrescente.
-- Algoritmos Bubble Sort e Selection Sort.
-- Exibição da lista original e ordenada.
+- Entrada de números separados por vírgula, espaço ou ponto e vírgula.
+- Validação de entradas vazias e valores inválidos.
+- Ordenação crescente ou decrescente.
+- Dois algoritmos implementados manualmente em JavaScript: Bubble Sort e Selection Sort.
+- Exibição lado a lado da lista original e da lista ordenada.
 - Contagem de comparações e trocas.
-- Demonstração das etapas de ordenação.
-- Interface adaptada para computadores e celulares.
+- Registro das etapas do algoritmo.
+- Suporte a números negativos e valores repetidos.
+- Interface responsiva para computador e celular.
 
-## Tecnologias utilizadas
+## Tecnologias
 
 - HTML5
 - CSS3
-- JavaScript
-- GitHub
-- GitHub Pages
+- JavaScript puro
+- GitHub para versionamento
+- GitHub Pages para hospedagem gratuita
 
-## Como executar
+## Como executar localmente
 
-Abra o arquivo index.html em um navegador.
+1. Baixe ou clone este repositório.
+2. Mantenha `index.html`, `style.css` e `script.js` na mesma pasta.
+3. Abra o arquivo `index.html` em um navegador.
 
-Não é necessário instalar programas ou configurar um servidor.
+Não é necessário instalar dependências nem configurar servidor.
 
-## Publicação
+## Como publicar no GitHub Pages
 
-O projeto pode ser hospedado gratuitamente com o GitHub Pages.
+1. Crie um repositório público no GitHub chamado `laboratorio-ordenacao`.
+2. Envie os arquivos `index.html`, `style.css`, `script.js` e `README.md` para a raiz do repositório.
+3. No repositório, abra **Settings** → **Pages**.
+4. Em **Build and deployment**, selecione **Deploy from a branch**.
+5. Escolha a branch `main` e a pasta `/(root)`, depois clique em **Save**.
+6. Aguarde a publicação. O GitHub exibirá o endereço público na seção Pages.
 
-Depois de ativar a publicação, adicione aqui o link do site.
+Depois de publicar, atualize este README com os links reais:
 
-## Testes
+- **Site publicado:** `https://SEU-USUARIO.github.io/laboratorio-ordenacao/`
+- **Repositório:** `https://github.com/SEU-USUARIO/laboratorio-ordenacao`
 
-Entrada: 5, 2, 8, 1
-Resultado crescente: 1, 2, 5, 8
+Substitua `SEU-USUARIO` pelo seu nome de usuário do GitHub.
 
-Entrada: 4, 2, 4, 1
-Resultado crescente: 1, 2, 4, 4
+## Testes recomendados
 
-Entrada: 3, -5, 0, -1
-Resultado crescente: -5, -1, 0, 3
+| Cenário | Entrada | Resultado crescente esperado |
+|---|---|---|
+| Sequência comum | `5, 2, 8, 1` | `1, 2, 5, 8` |
+| Valores repetidos | `4, 2, 4, 1` | `1, 2, 4, 4` |
+| Valores negativos | `3, -5, 0, -1` | `-5, -1, 0, 3` |
+| Um elemento | `7` | `7` |
+| Entrada vazia | *(vazio)* | Mensagem para informar números |
+| Entrada inválida | `3, abc, 2` | Mensagem de erro compreensível |
+| Ordem decrescente | `1, 5, 3` | `5, 3, 1` |
 
-Entrada: 1, 5, 3
-Resultado decrescente: 5, 3, 1
+Teste os cenários com os dois algoritmos. A implementação principal não usa `Array.sort()` para ordenar.
 
 ## Autores
 
 Adicione aqui os nomes dos integrantes do grupo.
-Gabryella Santos,Marco Tulio,Bryan Santos,Douglas Santos,Alexandre Martins# Laborat-rio-Ordena-o001
+
+## Melhorias futuras
+
+- Permitir que o usuário avance etapa por etapa.
+- Exibir animação visual das comparações.
+- Incluir outros algoritmos, como Insertion Sort e Merge Sort.
