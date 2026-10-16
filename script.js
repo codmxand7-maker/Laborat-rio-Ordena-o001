@@ -1,33 +1,47 @@
-```javascript
-const campoNumeros = document.getElementById("numeros");
-const campoAlgoritmo = document.getElementById("algoritmo");
-const campoOrdem = document.getElementById("ordem");
+'use strict';
 
-const botaoOrdenar = document.getElementById("ordenar");
-const botaoLimpar = document.getElementById("limpar");
+const formulario = document.getElementById('sort-form');
+const campoNumeros = document.getElementById('numbers');
+const campoAlgoritmo = document.getElementById('algorithm');
+const campoOrdem = document.getElementById('order');
 
-const mensagem = document.getElementById("mensagem");
-const listaOriginal = document.getElementById("original");
-const listaResultado = document.getElementById("resultado");
-const campoComparacoes = document.getElementById("comparacoes");
-const campoTrocas = document.getElementById("trocas");
-const campoNomeAlgoritmo = document.getElementById("nome-algoritmo");
-const campoEtapas = document.getElementById("etapas");
+const botaoExemplo = document.getElementById('example-button');
+const botaoLimpar = document.getElementById('clear-button');
+const mensagem = document.getElementById('message');
+const statusResultado = document.getElementById('result-status');
+
+const listaOriginal = document.getElementById('original-list');
+const listaResultado = document.getElementById('sorted-list');
+const descricaoResultado = document.getElementById('sorted-description');
+const quantidadeItens = document.getElementById('item-count');
+const rotuloOrdem = document.getElementById('order-label');
+
+const campoComparacoes = document.getElementById('comparisons');
+const campoTrocas = document.getElementById('swaps');
+const campoNomeAlgoritmo = document.getElementById('algorithm-used');
+
+const campoEtapas = document.getElementById('trace-list');
+const contagemEtapas = document.getElementById('step-count');
+const botaoMostrarMais = document.getElementById('show-more');
+
+const LIMITE_ETAPAS_INICIAIS = 12;
+let todasEtapas = [];
+let mostrandoTodasEtapas = false;
 
 function lerNumeros(texto) {
     const entrada = texto.trim();
 
-    if (entrada === "") {
-        throw new Error("Digite pelo menos um número.");
+    if (entrada === '') {
+        throw new Error('Digite pelo menos um número.');
     }
 
     const partes = entrada.split(/[,\s;]+/).filter(Boolean);
 
     if (partes.length > 100) {
-        throw new Error("Digite no máximo 100 números por vez.");
+        throw new Error('Digite no máximo 100 números por vez.');
     }
 
-    const numeros = partes.map(function(parte) {
+    return partes.map(function (parte) {
         if (!/^[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?$/i.test(parte)) {
             throw new Error('O valor "' + parte + '" não é um número válido.');
         }
@@ -35,21 +49,15 @@ function lerNumeros(texto) {
         const numero = Number(parte);
 
         if (!Number.isFinite(numero)) {
-            throw new Error("Todos os valores precisam ser números finitos.");
+            throw new Error('Todos os valores precisam ser números válidos.');
         }
 
         return numero;
     });
-
-    return numeros;
 }
 
 function precisaTrocar(a, b, ordem) {
-    if (ordem === "asc") {
-        return a > b;
-    }
-
-    return a < b;
+    return ordem === 'asc' ? a > b : a < b;
 }
 
 function bubbleSort(entrada, ordem) {
@@ -68,19 +76,18 @@ function bubbleSort(entrada, ordem) {
             const b = numeros[i + 1];
 
             if (precisaTrocar(a, b, ordem)) {
-                numeros[i] = b;
-                numeros[i + 1] = a;
+                [numeros[i], numeros[i + 1]] = [numeros[i + 1], numeros[i]];
                 trocas++;
                 houveTroca = true;
 
                 etapas.push(
-                    "Troca: " + a + " e " + b +
-                    ". Sequência: " + numeros.join(", ")
+                    'Troca: ' + a + ' e ' + b +
+                    '. Sequência: ' + numeros.join(', ')
                 );
             } else {
                 etapas.push(
-                    "Comparação: " + a + " e " + b +
-                    ". Não foi necessário trocar."
+                    'Comparação: ' + a + ' e ' + b +
+                    '. Não foi necessário trocar.'
                 );
             }
         }
@@ -90,12 +97,7 @@ function bubbleSort(entrada, ordem) {
         }
     }
 
-    return {
-        numeros,
-        etapas,
-        comparacoes,
-        trocas
-    };
+    return { numeros, etapas, comparacoes, trocas };
 }
 
 function selectionSort(entrada, ordem) {
@@ -111,11 +113,11 @@ function selectionSort(entrada, ordem) {
             comparacoes++;
 
             etapas.push(
-                "Comparação: " + numeros[escolhido] +
-                " com " + numeros[j] + "."
+                'Comparação: ' + numeros[escolhido] +
+                ' com ' + numeros[j] + '.'
             );
 
-            const melhor = ordem === "asc"
+            const melhor = ordem === 'asc'
                 ? numeros[j] < numeros[escolhido]
                 : numeros[j] > numeros[escolhido];
 
@@ -125,103 +127,152 @@ function selectionSort(entrada, ordem) {
         }
 
         if (escolhido !== i) {
-            const temporario = numeros[i];
-            numeros[i] = numeros[escolhido];
-            numeros[escolhido] = temporario;
+            [numeros[i], numeros[escolhido]] = [numeros[escolhido], numeros[i]];
             trocas++;
 
             etapas.push(
-                "Troca: colocou " + numeros[i] +
-                " na posição " + (i + 1) +
-                ". Sequência: " + numeros.join(", ")
+                'Troca: colocou ' + numeros[i] +
+                ' na posição ' + (i + 1) +
+                '. Sequência: ' + numeros.join(', ')
             );
         } else {
             etapas.push(
-                numeros[i] + " já estava na posição correta."
+                numeros[i] + ' já estava na posição correta.'
             );
         }
     }
 
-    return {
-        numeros,
-        etapas,
-        comparacoes,
-        trocas
-    };
+    return { numeros, etapas, comparacoes, trocas };
 }
 
 function mostrarNumeros(elemento, numeros) {
     elemento.replaceChildren();
+    elemento.classList.remove('empty-list');
 
-    numeros.forEach(function(numero) {
-        const etiqueta = document.createElement("span");
-        etiqueta.className = "numero";
+    numeros.forEach(function (numero) {
+        const etiqueta = document.createElement('span');
+        etiqueta.className = 'numero';
         etiqueta.textContent = String(numero);
         elemento.appendChild(etiqueta);
     });
+
+    if (numeros.length === 0) {
+        elemento.classList.add('empty-list');
+    }
 }
 
-function mostrarEtapas(etapas) {
+function mostrarEtapas() {
     campoEtapas.replaceChildren();
 
-    if (etapas.length === 0) {
-        const item = document.createElement("li");
-        item.textContent = "Nenhuma comparação foi necessária.";
+    const etapasVisiveis = mostrandoTodasEtapas
+        ? todasEtapas
+        : todasEtapas.slice(0, LIMITE_ETAPAS_INICIAIS);
+
+    if (etapasVisiveis.length === 0) {
+        const item = document.createElement('li');
+        item.className = 'trace-empty';
+        item.textContent = 'Execute a ordenação para ver as etapas aqui.';
         campoEtapas.appendChild(item);
-        return;
+    } else {
+        etapasVisiveis.forEach(function (etapa) {
+            const item = document.createElement('li');
+            item.textContent = etapa;
+            campoEtapas.appendChild(item);
+        });
     }
 
-    etapas.forEach(function(etapa) {
-        const item = document.createElement("li");
-        item.textContent = etapa;
-        campoEtapas.appendChild(item);
-    });
+    contagemEtapas.textContent =
+        todasEtapas.length +
+        (todasEtapas.length === 1 ? ' etapa' : ' etapas');
+
+    botaoMostrarMais.hidden =
+        todasEtapas.length <= LIMITE_ETAPAS_INICIAIS;
+
+    botaoMostrarMais.textContent = mostrandoTodasEtapas
+        ? 'Mostrar menos etapas'
+        : 'Mostrar todas as etapas';
 }
 
-botaoOrdenar.addEventListener("click", function() {
-    mensagem.textContent = "";
+formulario.addEventListener('submit', function (evento) {
+    evento.preventDefault();
+    mensagem.textContent = '';
 
     try {
         const numeros = lerNumeros(campoNumeros.value);
         const ordem = campoOrdem.value;
         const algoritmo = campoAlgoritmo.value;
 
-        let resultado;
-
-        if (algoritmo === "bubble") {
-            resultado = bubbleSort(numeros, ordem);
-            campoNomeAlgoritmo.textContent = "Bubble Sort";
-        } else {
-            resultado = selectionSort(numeros, ordem);
-            campoNomeAlgoritmo.textContent = "Selection Sort";
-        }
+        const resultado = algoritmo === 'bubble'
+            ? bubbleSort(numeros, ordem)
+            : selectionSort(numeros, ordem);
 
         mostrarNumeros(listaOriginal, numeros);
         mostrarNumeros(listaResultado, resultado.numeros);
-        mostrarEtapas(resultado.etapas);
 
-        campoComparacoes.textContent = resultado.comparacoes;
-        campoTrocas.textContent = resultado.trocas;
+        quantidadeItens.textContent = String(numeros.length);
+
+        rotuloOrdem.textContent =
+            ordem === 'asc' ? 'Crescente' : 'Decrescente';
+
+        descricaoResultado.textContent =
+            algoritmo === 'bubble'
+                ? 'Ordenado pelo Bubble Sort.'
+                : 'Ordenado pelo Selection Sort.';
+
+        campoComparacoes.textContent = String(resultado.comparacoes);
+        campoTrocas.textContent = String(resultado.trocas);
+
+        campoNomeAlgoritmo.textContent =
+            algoritmo === 'bubble' ? 'Bubble Sort' : 'Selection Sort';
+
+        statusResultado.textContent = 'Ordenação concluída';
+
+        todasEtapas = resultado.etapas;
+        mostrandoTodasEtapas = false;
+        mostrarEtapas();
+
     } catch (erro) {
-        mensagem.textContent = erro.message;
+        mensagem.textContent =
+            erro.message || 'Ocorreu um erro ao ordenar os números.';
     }
 });
 
-botaoLimpar.addEventListener("click", function() {
-    campoNumeros.value = "";
-    mensagem.textContent = "";
-
-    listaOriginal.textContent = "Aguardando números...";
-    listaResultado.textContent = "O resultado aparecerá aqui.";
-
-    campoComparacoes.textContent = "0";
-    campoTrocas.textContent = "0";
-    campoNomeAlgoritmo.textContent = "—";
-
-    campoEtapas.replaceChildren();
-
-    const item = document.createElement("li");
-    item.textContent = "Digite números e clique em Ordenar.";
-    campoEtapas.appendChild(item);
+botaoExemplo.addEventListener('click', function () {
+    campoNumeros.value = '8, 3, 10, -2, 3, 1';
+    campoNumeros.focus();
+    mensagem.textContent = '';
 });
-```
+
+botaoLimpar.addEventListener('click', function () {
+    campoNumeros.value = '';
+    mensagem.textContent = '';
+
+    listaOriginal.replaceChildren();
+    listaOriginal.textContent = 'Sua lista aparecerá aqui.';
+    listaOriginal.classList.add('empty-list');
+
+    listaResultado.replaceChildren();
+    listaResultado.textContent = 'Pronto para ordenar.';
+    listaResultado.classList.add('empty-list');
+
+    descricaoResultado.textContent = 'O resultado aparecerá aqui.';
+    quantidadeItens.textContent = '—';
+    rotuloOrdem.textContent = '—';
+
+    campoComparacoes.textContent = '—';
+    campoTrocas.textContent = '—';
+    campoNomeAlgoritmo.textContent = '—';
+
+    statusResultado.textContent = 'Aguardando sua sequência';
+
+    todasEtapas = [];
+    mostrandoTodasEtapas = false;
+    mostrarEtapas();
+
+    campoNumeros.focus();
+});
+
+botaoMostrarMais.addEventListener('click', function () {
+    mostrandoTodasEtapas = !mostrandoTodasEtapas;
+    mostrarEtapas();
+});
