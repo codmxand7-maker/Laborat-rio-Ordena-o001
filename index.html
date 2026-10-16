@@ -1,0 +1,104 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OrdenaLab - Ordenação de Números</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Ordena<span>Lab</span></h1>
+        <p>Laboratório de Algoritmos de Ordenação</p>
+    </header>
+
+    <main>
+        <section class="painel">
+            <h2>Ordene seus números</h2>
+            <p>Digite números separados por vírgula ou espaço.</p>
+
+            <label for="numeros">Sua sequência numérica</label>
+            <textarea id="numeros" placeholder="Ex.: 8, 3, 10, -2, 3, 1"></textarea>
+
+            <div class="campos">
+                <div>
+                    <label for="algoritmo">Algoritmo</label>
+                    <select id="algoritmo">
+                        <option value="bubble">Bubble Sort</option>
+                        <option value="selection">Selection Sort</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="ordem">Ordem</label>
+                    <select id="ordem">
+                        <option value="asc">Crescente</option>
+                        <option value="desc">Decrescente</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="botoes">
+                <button id="ordenar">Ordenar números →</button>
+                <button id="limpar" class="secundario">Limpar</button>
+            </div>
+
+            <p id="mensagem" role="status"></p>
+        </section>
+
+        <section>
+            <h2>Resultado</h2>
+            <div class="resultados">
+                <article class="cartao">
+                    <h3>Lista original</h3>
+                    <div id="original" class="numeros">Aguardando números...</div>
+                </article>
+
+                <article class="cartao destaque">
+                    <h3>Lista ordenada</h3>
+                    <div id="resultado" class="numeros">O resultado aparecerá aqui.</div>
+                </article>
+            </div>
+        </section>
+
+        <section>
+            <h2>Como o algoritmo funcionou?</h2>
+            <div class="estatisticas">
+                <div class="cartao">
+                    <p>Comparações</p>
+                    <strong id="comparacoes">0</strong>
+                </div>
+                <div class="cartao">
+                    <p>Trocas</p>
+                    <strong id="trocas">0</strong>
+                </div>
+                <div class="cartao">
+                    <p>Algoritmo</p>
+                    <strong id="nome-algoritmo">—</strong>
+                </div>
+            </div>
+
+            <article class="cartao etapas">
+                <h3>Etapas da ordenação</h3>
+                <ol id="etapas">
+                    <li>Digite números e clique em Ordenar.</li>
+                </ol>
+            </article>
+        </section>
+
+        <section class="explicacao">
+            <h2>Aprenda na prática</h2>
+            <p><strong>Bubble Sort:</strong> compara números vizinhos e troca suas posições quando necessário.</p>
+            <p><strong>Selection Sort:</strong> procura o menor ou maior número da parte ainda não ordenada e coloca esse valor na posição correta.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>OrdenaLab | Projeto de Estrutura de Dados</p>
+        <p>Desenvolvido com HTML, CSS e JavaScript.</p>
+    </footer>
+</body>
+</html>
+```
